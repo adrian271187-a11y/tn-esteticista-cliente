@@ -11,15 +11,15 @@
       "lang": "es",
       "icons": [
               {
-                        "src": "https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=https://tn-esteticista-cliente-production.up.railway.app",
+                                        "src": "/logo.jpg",
                         "sizes": "192x192",
-                        "type": "image/png",
+                                        "type": "image/jpeg",
                         "purpose": "any maskable"
               },
               {
-                        "src": "https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=https://tn-esteticista-cliente-production.up.railway.app",
+                                        "src": "/logo.jpg",
                         "sizes": "512x512",
-                        "type": "image/png",
+                                        "type": "image/jpeg",
                         "purpose": "any maskable"
               }
       ],
