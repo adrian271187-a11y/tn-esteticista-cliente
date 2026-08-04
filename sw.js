@@ -1,4 +1,4 @@
-const CACHE='tn-v8';
+const CACHE='tn-v9';
 const ASSETS=['/','index.html','manifest.json'];
 
 self.addEventListener('install',e=>{

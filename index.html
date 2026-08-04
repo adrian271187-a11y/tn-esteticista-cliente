@@ -306,6 +306,7 @@ document.getElementById('btn-confirmar').onclick=async()=>{
     await db.collection('appointments').add({name:nombre,nombre:nombre,tel,telefono:tel,correo,service:bk.svc.id,serviceName:bk.svc.name,servicio:bk.svc.name,date:bk.date,fecha:bk.date,start:bk.hora,hora:bk.hora,estado:'pendiente',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
     // Aviso al administrador
     try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian22-11@hotmail.com',tipo:'Nueva cita pendiente de confirmación',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
+    try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'tatiananunez052@gmail.com',tipo:'Nueva cita pendiente de confirmación',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
     show('step-form','none');show('step-ok','');
     document.getElementById('ok-nombre').textContent='\u00a1Gracias, '+nombre+'!';
     document.getElementById('ok-detalle').textContent=bk.svc.name+' \u2022 '+fFecha(bk.date)+' \u2022 '+bk.hora;
@@ -372,6 +373,7 @@ document.getElementById('btn-buscar-cancelar').addEventListener('click', async (
       // Aviso al administrador
       // Aviso al admin
       try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian22-11@hotmail.com',to_name:'Tatiana',tipo:'❌ Cita CANCELADA por el cliente',cliente_nombre:d.name||d.nombre||'—',cliente_tel:d.tel||'—',service_name:svcNombre,appointment_date:fecha,appointment_time:hora});}catch(e){}
+      try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'tatiananunez052@gmail.com',to_name:'Tatiana',tipo:'❌ Cita CANCELADA por el cliente',cliente_nombre:d.name||d.nombre||'—',cliente_tel:d.tel||'—',service_name:svcNombre,appointment_date:fecha,appointment_time:hora});}catch(e){}
       // Correo al cliente
       if(d.correo){try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:d.correo,to_name:d.name||d.nombre||'Cliente',tipo:'Tu cita ha sido cancelada',cliente_nombre:d.name||d.nombre||'—',cliente_tel:d.tel||'—',service_name:svcNombre,appointment_date:fecha,appointment_time:hora});}catch(e){}}
       row.innerHTML='<p class="note" style="color:var(--pink)">Cita cancelada correctamente.</p>';
