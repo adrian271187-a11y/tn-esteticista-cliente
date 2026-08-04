@@ -1,5 +1,5 @@
 :3000 {
-    root * /srv
+    root * /app
     file_server
     try_files {path} /index.html
 }
