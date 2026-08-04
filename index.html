@@ -298,6 +298,8 @@ document.getElementById('btn-confirmar').onclick=async()=>{
   try{
     await db.collection('appointments').add({name:nombre,nombre:nombre,tel,telefono:tel,correo,service:bk.svc.id,serviceName:bk.svc.name,servicio:bk.svc.name,date:bk.date,fecha:bk.date,start:bk.hora,hora:bk.hora,estado:'pendiente',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
     try{await emailjs.send('service_pwktaba','template_jm35zux',{to_email:correo,cliente_nombre:nombre,servicio:bk.svc.name,fecha:fFecha(bk.date),hora:bk.hora,negocio:'TN Esteticista'});}catch(e){}
+    // Aviso al administrador
+    try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian22-11@hotmail.com',tipo:'🆕 Nueva cita PENDIENTE de confirmación',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
     show('step-form','none');show('step-ok','');
     document.getElementById('ok-nombre').textContent='\u00a1Gracias, '+nombre+'!';
     document.getElementById('ok-detalle').textContent=bk.svc.name+' \u2022 '+fFecha(bk.date)+' \u2022 '+bk.hora;
