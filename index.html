@@ -73,6 +73,9 @@ input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10
 .install-bar{background:linear-gradient(135deg,#D4537E,#A83D5D);color:#fff;border-radius:14px;padding:14px 16px;margin:0 14px 14px;display:none;align-items:center;gap:12px;}
 .install-bar p{margin:0;font-size:0.85rem;flex:1;}
 .btn-inst{background:#fff;color:var(--dark);font-weight:700;border:none;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:0.82rem;}
+.ios-banner{background:linear-gradient(135deg,#D4537E,#A83D5D);color:#fff;border-radius:14px;padding:14px 16px;margin:0 14px 14px;display:none;flex-direction:column;gap:8px;}
+.ios-banner p{margin:0;font-size:0.85rem;line-height:1.5;}
+.ios-close{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;align-self:flex-end;padding:0;line-height:1;}
 </style>
 </head>
 <body>
@@ -282,14 +285,15 @@ document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',
   if(btn.dataset.tab==='galeria')renderGal();
 }));
 db.collection('appointments').onSnapshot(snap=>{appts={};snap.forEach(doc=>appts[doc.id]=doc.data());if(bk.date)renderSlots();});
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
+const isStandalonePWA=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+if(isIOS&&!isStandalonePWA){setTimeout(()=>{document.getElementById('ios-banner').style.display='flex';},1200);}
+document.getElementById('ios-close').onclick=()=>{document.getElementById('ios-banner').style.display='none';};
 let deferred=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;document.getElementById('install-bar').style.display='flex';});
-document.getElementById('btn-pwa').onclick=async()=>{
-  if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;document.getElementById('install-bar').style.display='none';}
-  else{alert('Para instalar: Chrome/Edge → Menú ⋮ → "Instalar app"\nSafari (iPhone) → Compartir → "Agregar a inicio"');}
-};
+document.getElementById('btn-pwa').onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;document.getElementById('install-bar').style.display='none';}else{alert('Para instalar: Menú (⋮) → "Instalar app" o "Añadir a pantalla de inicio"');}};
 window.addEventListener('appinstalled',()=>{document.getElementById('install-bar').style.display='none';});
-setTimeout(()=>{const ua=navigator.userAgent;const isEdge=ua.includes('Edg/');const isSamsung=ua.includes('SamsungBrowser');const isStandalone=window.matchMedia('(display-mode: standalone)').matches;if(!isStandalone&&(isEdge||isSamsung)&&!deferred)document.getElementById('install-bar').style.display='flex';},2000);
+setTimeout(()=>{const ua=navigator.userAgent;const isEdge=ua.includes('Edg/');const isSamsung=ua.includes('SamsungBrowser');if(!isStandalonePWA&&!isIOS&&(isEdge||isSamsung)&&!deferred)document.getElementById('install-bar').style.display='flex';},2000);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 renderSVC();
 </script>
