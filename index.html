@@ -248,7 +248,7 @@ document.getElementById('btn-confirmar').onclick=async()=>{
   if(!nombre||!tel||!correo){alert('Por favor llena todos los campos.');return;}
   const btn=document.getElementById('btn-confirmar');btn.disabled=true;btn.textContent='Enviando...';
   try{
-    await db.collection('appointments').add({name:nombre,tel,correo,service:bk.svc.id,serviceName:bk.svc.name,date:bk.date,start:bk.hora,estado:'pendiente',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+    await db.collection('appointments').add({name:nombre,nombre:nombre,tel,telefono:tel,correo,service:bk.svc.id,serviceName:bk.svc.name,servicio:bk.svc.name,date:bk.date,fecha:bk.date,start:bk.hora,hora:bk.hora,estado:'pendiente',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
     try{await emailjs.send('service_pwktaba','template_jm35zux',{to_email:correo,cliente_nombre:nombre,servicio:bk.svc.name,fecha:fFecha(bk.date),hora:bk.hora,negocio:'TN Esteticista'});}catch(e){}
     show('step-form','none');show('step-ok','');
     document.getElementById('ok-nombre').textContent='\u00a1Gracias, '+nombre+'!';
@@ -284,8 +284,12 @@ document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',
 db.collection('appointments').onSnapshot(snap=>{appts={};snap.forEach(doc=>appts[doc.id]=doc.data());if(bk.date)renderSlots();});
 let deferred=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;document.getElementById('install-bar').style.display='flex';});
-document.getElementById('btn-pwa').onclick=async()=>{if(!deferred)return;deferred.prompt();await deferred.userChoice;deferred=null;document.getElementById('install-bar').style.display='none';};
+document.getElementById('btn-pwa').onclick=async()=>{
+  if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;document.getElementById('install-bar').style.display='none';}
+  else{alert('Para instalar: Chrome/Edge → Menú ⋮ → "Instalar app"\nSafari (iPhone) → Compartir → "Agregar a inicio"');}
+};
 window.addEventListener('appinstalled',()=>{document.getElementById('install-bar').style.display='none';});
+setTimeout(()=>{const ua=navigator.userAgent;const isEdge=ua.includes('Edg/');const isStandalone=window.matchMedia('(display-mode: standalone)').matches;if(!isStandalone&&isEdge&&!deferred)document.getElementById('install-bar').style.display='flex';},2000);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 renderSVC();
 </script>
