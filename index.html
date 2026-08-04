@@ -76,6 +76,19 @@ input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10
 .ios-banner{background:linear-gradient(135deg,#D4537E,#A83D5D);color:#fff;border-radius:14px;padding:14px 16px;margin:0 14px 14px;display:none;flex-direction:column;gap:8px;}
 .ios-banner p{margin:0;font-size:0.85rem;line-height:1.5;}
 .ios-close{background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;align-self:flex-end;padding:0;line-height:1;}
+.install-section{background:var(--panel);border-radius:16px;margin:0 14px 14px;padding:16px 18px;text-align:center;border:1px solid var(--line);}
+.install-section h3{font-family:'Cormorant Garamond',serif;font-size:1.05rem;margin:0 0 12px;color:var(--ink);}
+.install-btns{display:flex;gap:10px;justify-content:center;}
+.install-btn{display:flex;align-items:center;gap:7px;padding:10px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--panel2);cursor:pointer;font-family:'Work Sans',sans-serif;font-size:0.85rem;font-weight:600;color:var(--ink);}
+.install-btn:hover{border-color:var(--pink);}
+.install-modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:flex-end;justify-content:center;z-index:200;}
+.install-modal.open{display:flex;}
+.ibox{background:var(--panel);border-radius:20px 20px 0 0;padding:22px 20px 40px;width:100%;max-width:480px;}
+.ibox h3{font-family:'Cormorant Garamond',serif;font-size:1.2rem;margin:0 0 14px;text-align:center;}
+.ibox p{font-size:0.87rem;color:var(--muted);margin:10px 0;line-height:1.6;}
+.ibox strong{color:var(--ink);}
+.iclose{float:right;background:none;border:none;font-size:1.3rem;color:var(--muted);cursor:pointer;margin:-4px -2px 0 0;}
+.snum{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--pink);color:#fff;font-size:0.7rem;font-weight:700;margin-right:5px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -89,10 +102,42 @@ input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10
   <button class="tab-btn" data-tab="galeria">Galer&iacute;a</button>
   <button class="tab-btn" data-tab="espera">Mi turno</button>
 </div>
-<div id="install-bar" class="install-bar">
-  <p>&#128242; <strong>Instala la app</strong> en tu tel&eacute;fono</p>
-  <button class="btn-inst" id="btn-pwa">Instalar</button>
+<div class="install-section">
+<h3>&#128242; Instala la app en tu celular</h3>
+<div class="install-btns">
+<button class="install-btn" onclick="showModal('modal-android')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="#3DDC84" xmlns="http://www.w3.org/2000/svg"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C7.15 3.28 6 5.01 6 7h12c0-1.99-1.15-3.72-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+Android
+</button>
+<button class="install-btn" onclick="showModal('modal-ios')">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="#555" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+iPhone / iPad
+</button>
 </div>
+</div>
+
+<div class="install-modal" id="modal-android" onclick="if(event.target===this)this.classList.remove('open')">
+<div class="ibox">
+<button class="iclose" onclick="document.getElementById('modal-android').classList.remove('open')">&#10005;</button>
+<h3>&#129504; Instalar en Android</h3>
+<p><span class="snum">1</span>Abre esta p&aacute;gina en <strong>Chrome</strong></p>
+<p><span class="snum">2</span>Toca el men&uacute; <strong>&#8942;</strong> (tres puntos, arriba a la derecha)</p>
+<p><span class="snum">3</span>Selecciona <strong>&ldquo;Instalar app&rdquo;</strong> o <strong>&ldquo;A&ntilde;adir a pantalla de inicio&rdquo;</strong></p>
+<p><span class="snum">4</span>Toca <strong>&ldquo;Instalar&rdquo;</strong> para confirmar &#10003;</p>
+</div>
+</div>
+
+<div class="install-modal" id="modal-ios" onclick="if(event.target===this)this.classList.remove('open')">
+<div class="ibox">
+<button class="iclose" onclick="document.getElementById('modal-ios').classList.remove('open')">&#10005;</button>
+<h3>&#63743; Instalar en iPhone / iPad</h3>
+<p><span class="snum">1</span>Abre esta p&aacute;gina en <strong>Safari</strong> (no Chrome)</p>
+<p><span class="snum">2</span>Toca el bot&oacute;n <strong>Compartir</strong> &#11014; en la barra inferior</p>
+<p><span class="snum">3</span>Desliza y toca <strong>&ldquo;A&ntilde;adir a pantalla de inicio&rdquo;</strong></p>
+<p><span class="snum">4</span>Toca <strong>&ldquo;A&ntilde;adir&rdquo;</strong> en la esquina superior derecha &#10003;</p>
+</div>
+</div>
+
 <div class="screen active" id="screen-cliente">
   <div id="step-svc">
     <div class="card"><h2>1. Elige tu servicio</h2><div id="svc-grid"></div></div>
@@ -285,15 +330,9 @@ document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',
   if(btn.dataset.tab==='galeria')renderGal();
 }));
 db.collection('appointments').onSnapshot(snap=>{appts={};snap.forEach(doc=>appts[doc.id]=doc.data());if(bk.date)renderSlots();});
-const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.MSStream;
-const isStandalonePWA=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
-if(isIOS&&!isStandalonePWA){setTimeout(()=>{document.getElementById('ios-banner').style.display='flex';},1200);}
-document.getElementById('ios-close').onclick=()=>{document.getElementById('ios-banner').style.display='none';};
-let deferred=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;document.getElementById('install-bar').style.display='flex';});
-document.getElementById('btn-pwa').onclick=async()=>{if(deferred){deferred.prompt();await deferred.userChoice;deferred=null;document.getElementById('install-bar').style.display='none';}else{alert('Para instalar: Menú (⋮) → "Instalar app" o "Añadir a pantalla de inicio"');}};
-window.addEventListener('appinstalled',()=>{document.getElementById('install-bar').style.display='none';});
-setTimeout(()=>{const ua=navigator.userAgent;const isEdge=ua.includes('Edg/');const isSamsung=ua.includes('SamsungBrowser');if(!isStandalonePWA&&!isIOS&&(isEdge||isSamsung)&&!deferred)document.getElementById('install-bar').style.display='flex';},2000);
+function showModal(id){document.getElementById(id).classList.add('open');}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._pwaDeferred=e;});
+window.addEventListener('appinstalled',()=>{document.querySelector('.install-section').style.display='none';});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 renderSVC();
 </script>
