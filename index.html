@@ -187,6 +187,13 @@ iPhone / iPad
       <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
   </div>
+  <div class="card" style="margin-top:14px">
+    <h2>¿Necesitas cancelar una cita?</h2>
+    <label>Teléfono con el que reservaste</label>
+    <input id="cancel-tel" placeholder="Ej. 6000-0000">
+    <button class="btn sec" id="btn-buscar-cancelar" style="margin-top:10px">Buscar mis citas</button>
+    <div id="resultados-cancelar" style="margin-top:12px"></div>
+  </div>
 </div>
 <div class="screen" id="screen-galeria">
   <div class="card"><h2>Galer&iacute;a</h2><div class="gallery-grid" id="gal-grid"></div></div>
@@ -336,6 +343,43 @@ window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._pwa
 window.addEventListener('appinstalled',()=>{document.querySelector('.install-section').style.display='none';});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 renderSVC();
+
+// ---------- Cancelar cita desde la app cliente ----------
+document.getElementById('btn-buscar-cancelar').addEventListener('click', async ()=>{
+  const tel = document.getElementById('cancel-tel').value.trim();
+  const resultados = document.getElementById('resultados-cancelar');
+  if(!tel){ resultados.innerHTML='<p class="note">Escribe tu teléfono.</p>'; return; }
+  resultados.innerHTML='<p class="note">Buscando...</p>';
+  const snap = await db.collection('appointments').where('tel','==',tel).get();
+  if(snap.empty){ resultados.innerHTML='<p class="note">No encontramos citas con ese teléfono.</p>'; return; }
+  resultados.innerHTML='';
+  snap.forEach(doc=>{
+    const d = doc.data();
+    const svcNombre = d.serviceName || d.servicio || d.service || '—';
+    const fecha = d.fecha || d.date || d.day || '—';
+    const hora = d.hora || d.start || '—';
+    const row = document.createElement('div');
+    row.className = 'summary-row';
+    row.style.flexDirection = 'column';
+    row.style.gap = '6px';
+    row.innerHTML = '<span style="font-size:0.9rem"><strong>'+svcNombre+'</strong> · '+fecha+' '+hora+'</span>';
+    const btn = document.createElement('button');
+    btn.className = 'btn sec';
+    btn.textContent = 'Cancelar esta cita';
+    btn.addEventListener('click', async ()=>{
+      if(!confirm('¿Seguro que deseas cancelar esta cita?')) return;
+      await db.collection('appointments').doc(doc.id).delete();
+      // Aviso al administrador
+      // Aviso al admin
+      try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian22-11@hotmail.com',to_name:'Tatiana',tipo:'❌ Cita CANCELADA por el cliente',cliente_nombre:d.name||d.nombre||'—',cliente_tel:d.tel||'—',service_name:svcNombre,appointment_date:fecha,appointment_time:hora});}catch(e){}
+      // Correo al cliente
+      if(d.correo){try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:d.correo,to_name:d.name||d.nombre||'Cliente',tipo:'Tu cita ha sido cancelada',cliente_nombre:d.name||d.nombre||'—',cliente_tel:d.tel||'—',service_name:svcNombre,appointment_date:fecha,appointment_time:hora});}catch(e){}}
+      row.innerHTML='<p class="note" style="color:var(--pink)">Cita cancelada correctamente.</p>';
+    });
+    row.appendChild(btn);
+    resultados.appendChild(row);
+  });
+});
 </script>
 </body>
 </html>

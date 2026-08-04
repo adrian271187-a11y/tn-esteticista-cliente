@@ -1,4 +1,4 @@
-const CACHE='tn-v6';
+const CACHE='tn-v8';
 const ASSETS=['/','index.html','manifest.json'];
 
 self.addEventListener('install',e=>{
@@ -12,7 +12,6 @@ self.addEventListener('activate',e=>{
 });
 
 self.addEventListener('fetch',e=>{
-  // Solo cachear requests del mismo origen
   if(!e.request.url.startsWith(self.location.origin))return;
   e.respondWith(
     caches.match(e.request).then(cached=>{
