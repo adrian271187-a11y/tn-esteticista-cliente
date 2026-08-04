@@ -297,10 +297,10 @@ document.getElementById('btn-confirmar').onclick=async()=>{
   const btn=document.getElementById('btn-confirmar');btn.disabled=true;btn.textContent='Enviando...';
   try{
     await db.collection('appointments').add({name:nombre,nombre:nombre,tel,telefono:tel,correo,service:bk.svc.id,serviceName:bk.svc.name,servicio:bk.svc.name,date:bk.date,fecha:bk.date,start:bk.hora,hora:bk.hora,estado:'pendiente',createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    // Correo de confirmación al cliente
+    // Correo al cliente
     try{await emailjs.send('service_pwktaba','template_jm35zux',{to_name:nombre,to_email:correo,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora,business_name:'TN Esteticista',email:correo});}catch(e){}
-    // Aviso a Tatiana — nueva cita pendiente
-    try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian271187@gmail.com',tipo:'🆕 Nueva cita PENDIENTE',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
+    // Aviso a Tatiana
+    try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian22-11@hotmail.com',tipo:'🆕 Nueva cita PENDIENTE',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
     show('step-form','none');show('step-ok','');
     document.getElementById('ok-nombre').textContent='\u00a1Gracias, '+nombre+'!';
     document.getElementById('ok-detalle').textContent=bk.svc.name+' \u2022 '+fFecha(bk.date)+' \u2022 '+bk.hora;
