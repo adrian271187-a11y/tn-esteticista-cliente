@@ -300,7 +300,7 @@ document.getElementById('btn-confirmar').onclick=async()=>{
     // Correo de confirmación al cliente
     try{await emailjs.send('service_pwktaba','template_jm35zux',{to_name:nombre,to_email:correo,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora,business_name:'TN Esteticista',email:correo});}catch(e){}
     // Aviso a Tatiana — nueva cita pendiente
-    try{await emailjs.send('service_pwktaba','template_jm35zux',{to_name:'Tatiana',to_email:'adrian271187@gmail.com',service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora,business_name:'🆕 Nueva cita PENDIENTE de: '+nombre+' · Tel: '+tel,email:'adrian271187@gmail.com'});}catch(e){}
+    try{await emailjs.send('service_pwktaba','template_y3zvu9a',{to_email:'adrian271187@gmail.com',tipo:'🆕 Nueva cita PENDIENTE',cliente_nombre:nombre,cliente_tel:tel,service_name:bk.svc.name,appointment_date:fFecha(bk.date),appointment_time:bk.hora});}catch(e){}
     show('step-form','none');show('step-ok','');
     document.getElementById('ok-nombre').textContent='\u00a1Gracias, '+nombre+'!';
     document.getElementById('ok-detalle').textContent=bk.svc.name+' \u2022 '+fFecha(bk.date)+' \u2022 '+bk.hora;
